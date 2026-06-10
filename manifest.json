@@ -1,7 +1,7 @@
 {
   "name": "Plan 30 Gabo & Kathy",
   "short_name": "Plan30",
-  "start_url": "./index.html",
+  "start_url": "/RutaFit/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
