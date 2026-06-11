@@ -480,34 +480,23 @@ function initGlobalControls() {
 
 function initTabs() {
   const tabButtons = document.querySelectorAll("[data-tab]");
-  const tabPanels = document.querySelectorAll("[data-tab-panel]");
 
   function showTab(tabName) {
     tabButtons.forEach((btn) => {
-      if (btn.dataset.tab === tabName) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
+      btn.classList.toggle("active", btn.dataset.tab === tabName);
     });
-    tabPanels.forEach((panel) => {
-      if (panel.dataset.tabPanel === tabName) {
-        panel.style.display = "";
-      } else {
-        panel.style.display = "none";
-      }
+    // Panels are identified by id matching the data-tab value
+    document.querySelectorAll(".tab-content").forEach((panel) => {
+      panel.classList.toggle("active", panel.id === tabName);
     });
   }
 
   tabButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const tabName = btn.dataset.tab;
-      showTab(tabName);
-    });
+    btn.addEventListener("click", () => showTab(btn.dataset.tab));
   });
 
   // Tab por defecto: Día
-  showTab("day");
+  showTab("tab-dia");
 }
 
 // --------------------------------------------------------------------------
