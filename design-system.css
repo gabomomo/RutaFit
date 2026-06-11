@@ -1,0 +1,380 @@
+/* =====================================================================
+   PlanFitnessApp – Design System (Unified)
+   - Single source of truth for colors, typography, spacing, components.
+   - No inline CSS in HTML. Use classes from this file.
+   ===================================================================== */
+
+/* -----------------------------
+   1) Design Tokens
+------------------------------ */
+:root{
+  /* Brand / Accent */
+  --accent: #8b5cf6;
+  --accent-2: #4f46e5;
+  --accent-hover: #a78bfa;
+
+  /* Backgrounds */
+  --bg: #05030a;
+  --bg-grad-1: #1f152f;
+  --bg-grad-2: #05030a;
+
+  --surface: rgba(18, 13, 34, .72);
+  --surface-2: rgba(22, 15, 34, .82);
+  --surface-solid: #120d22;
+
+  /* Text */
+  --text: rgba(249, 250, 251, .96);
+  --text-strong: #f9fafb;
+  --text-muted: rgba(156, 163, 175, .92);
+
+  /* Borders / Shadows */
+  --stroke: rgba(255,255,255,.10);
+  --stroke-soft: rgba(255,255,255,.08);
+  --shadow: 0 12px 30px rgba(0,0,0,.45);
+
+  /* Radius / Spacing */
+  --r-lg: 18px;
+  --r-md: 14px;
+  --r-sm: 12px;
+
+  --s-1: 6px;
+  --s-2: 10px;
+  --s-3: 14px;
+  --s-4: 18px;
+  --s-5: 24px;
+
+  /* Action colors */
+  --danger: #ef4444;
+  --danger-hover: #f87171;
+
+  --warn: #facc15;
+  --info: #38bdf8;
+  --success: #22c55e;
+
+  /* Icon button defaults */
+  --icon-idle-bg: rgba(255,255,255,.08);
+  --icon-idle-stroke: rgba(255,255,255,.18);
+  --icon-idle-fg: rgba(255,255,255,.85);
+}
+
+/* -----------------------------
+   2) Global Base
+------------------------------ */
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(120,60,255,.18), transparent 70%),
+    radial-gradient(900px 500px at 85% 25%, rgba(0,200,255,.10), transparent 70%),
+    linear-gradient(180deg, var(--bg-grad-1), var(--bg-grad-2));
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a{ color: inherit; text-decoration: none; }
+a:hover{ text-decoration: underline; }
+
+hr.hr-soft{
+  border: none;
+  height: 1px;
+  background: var(--stroke-soft);
+  margin: var(--s-4) 0;
+}
+
+/* -----------------------------
+   3) Layout Helpers
+------------------------------ */
+.app-shell{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 84px; /* leave space for bottom nav */
+}
+
+@media (max-width: 576px){
+  .app-shell{ padding: 18px 14px 92px; }
+}
+
+/* -----------------------------
+   4) Surfaces / Cards
+------------------------------ */
+.glass-card{
+  background: var(--surface);
+  border: 1px solid var(--stroke-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.card,
+.section-card,
+.top-card{
+  background: var(--surface-2);
+  border: 1px solid var(--stroke-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+/* Optional highlight card */
+.card-primary{
+  border-color: rgba(139, 92, 246, .45);
+  box-shadow: 0 0 0 1px rgba(139,92,246,.12), var(--shadow);
+}
+
+/* -----------------------------
+   5) Top Bars
+------------------------------ */
+.top-bar,
+.top-card{
+  background: var(--surface-solid);
+  padding: 14px 18px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--stroke-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.top-bar-left{ display:flex; align-items:center; gap: 10px; }
+.top-bar-right{ display:flex; align-items:center; gap: 10px; }
+
+.top-avatar,
+.admin-avatar,
+.avatar-circle{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  display: grid;
+  place-items: center;
+  color: #0b0714;
+  font-weight: 800;
+}
+
+/* "Hola Nombre" */
+.top-hello{ display:flex; gap: 6px; align-items: baseline; }
+.top-hello span:first-child{ color: var(--text-muted); }
+
+/* -----------------------------
+   6) Typography
+------------------------------ */
+.h-title{
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0;
+}
+.h-sub{
+  color: var(--text-muted);
+  font-size: .92rem;
+  margin: 2px 0 0;
+}
+
+.sub-label{
+  color: var(--text-muted);
+  font-size: .85rem;
+}
+
+.muted{ color: var(--text-muted) !important; }
+
+/* -----------------------------
+   7) Buttons
+------------------------------ */
+.btn-soft,
+.logout-btn{
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: var(--text-strong);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 600;
+}
+
+.btn-soft:hover,
+.logout-btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.20);
+}
+
+.btn-accent{
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border: none;
+  color: #0b0714;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 10px 16px;
+}
+
+.btn-accent:hover{ filter: brightness(1.08); }
+
+.btn-danger-solid{
+  background: var(--danger);
+  border: none;
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 800;
+}
+.btn-danger-solid:hover{ background: var(--danger-hover); }
+
+/* Bootstrap button unification */
+.btn.btn-primary{
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border: none;
+  color: #0b0714;
+  font-weight: 800;
+  border-radius: 999px;
+}
+.btn.btn-primary:hover{ filter: brightness(1.08); }
+
+.btn.btn-danger{
+  background: var(--danger);
+  border: none;
+  border-radius: 999px;
+  font-weight: 800;
+}
+.btn.btn-danger:hover{ background: var(--danger-hover); }
+
+.btn.btn-outline-light{
+  border-color: rgba(255,255,255,.28);
+}
+
+/* -----------------------------
+   8) Forms
+------------------------------ */
+.form-control, .form-select, textarea{
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: var(--text) !important;
+  border-radius: var(--r-md) !important;
+}
+
+.form-control::placeholder{ color: rgba(255,255,255,.45); }
+
+.form-control:focus, .form-select:focus, textarea:focus{
+  border-color: rgba(139,92,246,.70) !important;
+  box-shadow: 0 0 0 3px rgba(139,92,246,.18) !important;
+}
+
+/* Make Bootstrap labels consistent on dark */
+.form-label{ color: rgba(249,250,251,.88); }
+
+/* -----------------------------
+   9) Tables / Data grids
+------------------------------ */
+.table{
+  color: var(--text) !important;
+}
+.table thead th{
+  color: rgba(156,163,175,.95) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: .78rem;
+  letter-spacing: .04em;
+}
+.table tbody td{
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+.table-wrap{
+  overflow: auto;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--stroke-soft);
+}
+
+/* -----------------------------
+   10) Progress
+------------------------------ */
+.progress{
+  background: rgba(255,255,255,.08);
+  border-radius: 999px;
+  height: 10px;
+}
+.progress-bar{
+  background: linear-gradient(90deg, #b88bff, #8b5cf6);
+}
+
+/* -----------------------------
+   11) Bottom Navigation
+------------------------------ */
+.bottom-tabs{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(10, 8, 16, .92);
+  border-top: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(12px);
+  padding: 10px 10px 14px;
+  z-index: 999;
+}
+
+.bottom-tabs .tabs{
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tab-button{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  color: rgba(255,255,255,.65);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.tab-button i{ font-size: 1.1rem; }
+.tab-button.active{
+  color: #0b0714;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border-color: rgba(255,255,255,.0);
+}
+.tab-button:hover{
+  border-color: rgba(255,255,255,.18);
+}
+
+/* -----------------------------
+   12) Icon Buttons (Admin actions)
+------------------------------ */
+.icon-btn{
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  transition: transform .15s ease, filter .15s ease, background .15s ease, border-color .15s ease;
+}
+.icon-btn:hover{
+  transform: translateY(-1px) scale(1.06);
+  filter: brightness(1.06);
+  border-color: rgba(255,255,255,.22);
+}
+
+/* Solid colored states (when "active") */
+.icon-solid-edit{ background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-color: transparent; color:#0b0714; }
+.icon-solid-delete{ background: var(--danger); border-color: transparent; color:#fff; }
+.icon-solid-plan{ background: var(--warn); border-color: transparent; color:#0b0714; }
+.icon-solid-routine{ background: var(--info); border-color: transparent; color:#0b0714; }
+
+/* Inactive grey (when user has no plan/routine) */
+.icon-inactive{
+  background: var(--icon-idle-bg);
+  border-color: var(--icon-idle-stroke);
+  color: var(--icon-idle-fg);
+}
+
+/* -----------------------------
+   13) Utility
+------------------------------ */
+.hide{ display:none !important; }
+.gap-12{ gap: 12px !important; }
+.round-lg{ border-radius: var(--r-lg) !important; }

@@ -1,381 +1,318 @@
 <!DOCTYPE html>
+
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Plan 30 días</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- iPhone / iPad icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-
+<head>
+<meta charset="utf-8"/>
+<title>Plan 30 días</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- iPhone / iPad icon -->
+<link href="icons/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <!-- PWA manifest (sigue funcionando aunque no hagas PWA aún) -->
-<link rel="manifest" href="manifest.json">
-
+<link href="manifest.json" rel="manifest"/>
 <!-- Forzar modo standalone al agregar a home -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-    <link rel="stylesheet" href="style.css" />
-	<script type="module" src="firebase-init.js"></script>
-<script type="module" src="app.js"></script>
-  </head>
-  <body>
-    <div class="app-shell">
-      <!-- TOP BAR -->
-      <header class="top-bar">
-        <div class="top-bar-left">
-          <div id="topAvatar" class="top-avatar">G</div>
-          <div class="top-hello">
-            <span>Hola</span>
-            <span id="topUserName">Gabo</span>
-          </div>
-        </div>
-        <div class="top-bar-right">
-          <select id="userSelect"></select>
-        </div>
-      </header>
-
-      <!-- SELECTOR DE DÍA + RESUMEN -->
-      <section class="card card-primary">
-        <div class="section-header-row">
-          <div>
-            <span class="sub-label">Selecciona el día</span><br />
-            <select id="daySelect"></select>
-          </div>
-          <div class="day-header-right">
-            <span class="sub-label">Calorías objetivo</span><br />
-            <strong>~<span id="caloriesHintSpan">2400</span> kcal</strong>
-          </div>
-        </div>
-
-        <div class="day-header">
-          <div class="day-header-left">
-            <div id="dayName" class="day-name">
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<script src="firebase-init.js" type="module"></script>
+<script src="app.js" type="module"></script>
+<!-- Bootstrap -->
+<!-- App Design System -->
+<!-- Bootstrap (CDN) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+<!-- App unified CSS -->
+<link href="./style.ds.css" rel="stylesheet"/>
+</head>
+<body class="page-index">
+<div class="app-shell">
+<!-- TOP BAR -->
+<header class="top-bar"><div class="top-bar-left"><div class="top-avatar" id="topAvatar">G</div><div class="top-hello"><span>Hola</span><span id="topUserName">—</span></div></div><div class="top-bar-right"><select class="visually-hidden" id="userSelect"></select><button class="btn btn-danger" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button></div></header>
+<!-- SELECTOR DE DÍA + RESUMEN -->
+<section class="card p-3">
+<div class="section-header-row">
+<div>
+<span class="sub-label">Selecciona el día</span><br/>
+<select id="daySelect"></select>
+</div>
+<div class="day-header-right">
+<span class="sub-label">Calorías objetivo</span><br/>
+<strong>~<span id="caloriesHintSpan">2400</span> kcal</strong>
+</div>
+</div>
+<div class="day-header">
+<div class="day-header-left">
+<div class="day-name" id="dayName">
               Día 1 – Lunes: Fuerza superior
             </div>
-            <div id="nutritionFocus" class="day-focus">
+<div class="day-focus" id="nutritionFocus">
               Enfoque nutricional del día.
             </div>
-          </div>
-        </div>
-
-        <!-- Progreso total del día -->
-        <div class="progress-wrapper-main">
-          <span class="progress-label">Progreso total del día:</span>
-          <div class="progress-bar">
-            <div id="dayTotalFill" class="progress-fill"></div>
-          </div>
-          <span id="dayTotalPercent" class="progress-percent-main">0%</span>
-        </div>
-
-        <div
-          style="
+</div>
+</div>
+<!-- Progreso total del día -->
+<div class="progress-wrapper-main">
+<span class="progress-label">Progreso total del día:</span>
+<div class="progress-bar">
+<div class="progress-fill" id="dayTotalFill"></div>
+</div>
+<span class="progress-percent-main" id="dayTotalPercent">0%</span>
+</div>
+<div style="
             margin-top: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-          "
-        >
-          <span id="dayStatusLabel" class="badge-status">🟡 Día en curso</span>
-          <button id="btnCloseDay" class="btn btn-outline">
+          ">
+<span class="badge-status" id="dayStatusLabel">🟡 Día en curso</span>
+<button class="btn btn-outline" id="btnCloseDay">
             🔒 Cerrar día
           </button>
-        </div>
-      </section>
-
-      <!-- CONTENIDO PRINCIPAL POR TABS -->
-      <main>
-        <!-- TAB DÍA -->
-        <section id="tab-dia" class="tab-content active">
-          <div class="layout-two-col">
-            <!-- Nutrición -->
-            <div class="col-left">
-              <section class="card">
-                <div class="section-header-row">
-                  <h2 class="card-title">Guía de porciones diarias</h2>
-                  <span class="section-subtitle">
+</div>
+</section>
+<!-- CONTENIDO PRINCIPAL POR TABS -->
+<main>
+<!-- TAB DÍA -->
+<section class="tab-content active" id="tab-dia">
+<div class="layout-two-col">
+<!-- Nutrición -->
+<div class="col-left">
+<section class="card p-3">
+<div class="section-header-row">
+<h2 class="card-title">Guía de porciones diarias</h2>
+<span class="section-subtitle">
                     Marca cuando cumplas cada objetivo.
                   </span>
-                </div>
-                <ul id="portionTargets"></ul>
-
-                <div
-                  style="
+</div>
+<ul id="portionTargets"></ul>
+<div style="
                     margin-top: 10px;
                     display: grid;
                     grid-template-columns: repeat(2, minmax(0, 1fr));
                     gap: 6px;
-                  "
-                >
-                  <label class="exercise-checkbox">
-                    <input type="checkbox" id="chkProtein" />
-                    <span class="checkmark"></span>
-                    <span>Proteínas</span>
-                  </label>
-                  <label class="exercise-checkbox">
-                    <input type="checkbox" id="chkCarbs" />
-                    <span class="checkmark"></span>
-                    <span>Carbohidratos</span>
-                  </label>
-                  <label class="exercise-checkbox">
-                    <input type="checkbox" id="chkFats" />
-                    <span class="checkmark"></span>
-                    <span>Grasas saludables</span>
-                  </label>
-                  <label class="exercise-checkbox">
-                    <input type="checkbox" id="chkVeggies" />
-                    <span class="checkmark"></span>
-                    <span>Vegetales</span>
-                  </label>
-                  <label class="exercise-checkbox">
-                    <input type="checkbox" id="chkFruits" />
-                    <span class="checkmark"></span>
-                    <span>Frutas</span>
-                  </label>
-                  <label class="exercise-checkbox">
-                    <input type="checkbox" id="chkDairy" />
-                    <span class="checkmark"></span>
-                    <span>Lácteo</span>
-                  </label>
-                  <label class="exercise-checkbox">
-                    <input type="checkbox" id="chkWhey" />
-                    <span class="checkmark"></span>
-                    <span>Proteína en polvo</span>
-                  </label>
-                </div>
-              </section>
-
-              <!-- Plan alimenticio del día -->
-              <section class="card">
-                <div class="section-header-row">
-                  <h2 class="card-title">Plan alimenticio del día</h2>
-                  <span class="section-subtitle" id="wheyTimingLabel">
+                  ">
+<label class="exercise-checkbox">
+<input id="chkProtein" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Proteínas</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkCarbs" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Carbohidratos</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkFats" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Grasas saludables</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkVeggies" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Vegetales</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkFruits" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Frutas</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkDairy" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Lácteo</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkWhey" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Proteína en polvo</span>
+</label>
+</div>
+</section>
+<!-- Plan alimenticio del día -->
+<section class="card p-3">
+<div class="section-header-row">
+<h2 class="card-title">Plan alimenticio del día</h2>
+<span class="section-subtitle" id="wheyTimingLabel">
                     Proteína en polvo después del entrenamiento.
                   </span>
-                </div>
-                <div id="mealsContainer"></div>
-              </section>
-            </div>
-
-            <!-- Entrenamiento + Agua/Notas -->
-            <div class="col-right">
-              <section class="card" id="card-entrenamiento">
-                <div class="section-header-row">
-                  <h2 class="card-title">Entrenamiento / Ejercicio</h2>
-                  <span class="section-subtitle">Elige qué hiciste hoy.</span>
-                </div>
-
-                <div class="exercise-mode">
-                  <div class="exercise-mode-left">
-                    <label class="exercise-checkbox">
-                      <input type="checkbox" id="chkGymMode" />
-                      <span class="checkmark"></span>
-                      <span>Gym</span>
-                    </label>
-                    <label class="exercise-checkbox">
-                      <input type="checkbox" id="chkWalkDone" />
-                      <span class="checkmark"></span>
-                      <span>Caminata</span>
-                    </label>
-                    <label class="exercise-checkbox">
-                      <input type="checkbox" id="chkPadelDone" />
-                      <span class="checkmark"></span>
-                      <span>Pádel</span>
-                    </label>
-                    <label class="exercise-checkbox">
-                      <input type="checkbox" id="chkSwimDone" />
-                      <span class="checkmark"></span>
-                      <span>Natación</span>
-                    </label>
-                  </div>
-                  <div class="exercise-mode-right">
-                    <span class="toggle-label">No hice ejercicio</span>
-                    <label class="toggle-switch">
-                      <input type="checkbox" id="chkNoExercise" />
-                      <span class="toggle-slider"></span>
-                    </label>
-                  </div>
-                </div>
-
-                <!-- Bloque Gym -->
-                <div id="trainingContent" class="training-content">
-                  <h3 id="trainingTitle" class="training-title">
+</div>
+<div id="mealsContainer"></div>
+</section>
+</div>
+<!-- Entrenamiento + Agua/Notas -->
+<div class="col-right">
+<section class="card p-3" id="card-entrenamiento">
+<div class="section-header-row">
+<h2 class="card-title">Entrenamiento / Ejercicio</h2>
+<span class="section-subtitle">Elige qué hiciste hoy.</span>
+</div>
+<div class="exercise-mode">
+<div class="exercise-mode-left">
+<label class="exercise-checkbox">
+<input id="chkGymMode" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Gym</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkWalkDone" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Caminata</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkPadelDone" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Pádel</span>
+</label>
+<label class="exercise-checkbox">
+<input id="chkSwimDone" type="checkbox"/>
+<span class="checkmark"></span>
+<span>Natación</span>
+</label>
+</div>
+<div class="exercise-mode-right">
+<span class="toggle-label">No hice ejercicio</span>
+<label class="toggle-switch">
+<input id="chkNoExercise" type="checkbox"/>
+<span class="toggle-slider"></span>
+</label>
+</div>
+</div>
+<!-- Bloque Gym -->
+<div class="training-content" id="trainingContent">
+<h3 class="training-title" id="trainingTitle">
                     Rutina de hoy
                   </h3>
-                  <ul id="trainingDetails" class="training-list"></ul>
-
-                  <div class="progress-wrapper-main" style="margin-top: 6px">
-                    <span class="progress-label">Progreso entrenamiento (Gym):</span>
-                    <div class="progress-bar">
-                      <div
-                        id="trainingProgressFill"
-                        class="progress-fill"
-                      ></div>
-                    </div>
-                    <span
-                      id="trainingProgressPercent"
-                      class="progress-percent-main"
-                      >0%</span
-                    >
-                  </div>
-                </div>
-              </section>
-
-              <!-- Agua y notas -->
-              <section class="card">
-                <div class="section-header-row">
-                  <h2 class="card-title">Agua y notas</h2>
-                  <span class="section-subtitle">
+<ul class="training-list" id="trainingDetails"></ul>
+<div class="progress-wrapper-main" style="margin-top: 6px">
+<span class="progress-label">Progreso entrenamiento (Gym):</span>
+<div class="progress-bar">
+<div class="progress-fill" id="trainingProgressFill"></div>
+</div>
+<span class="progress-percent-main" id="trainingProgressPercent">0%</span>
+</div>
+</div>
+</section>
+<!-- Agua y notas -->
+<section class="card p-3">
+<div class="section-header-row">
+<h2 class="card-title">Agua y notas</h2>
+<span class="section-subtitle">
                     Registra tu hidratación y cómo te sentiste hoy.
                   </span>
-                </div>
-
-                <div
-                  style="
+</div>
+<div style="
                     display: grid;
                     grid-template-columns: minmax(0, 1fr);
                     gap: 8px;
                     margin-top: 8px;
-                  "
-                >
-                  <div>
-                    <label for="waterInput" class="sub-label"
-                      >Agua tomada (litros)</label
-                    >
-                    <input
-                      type="number"
-                      id="waterInput"
-                      min="0"
-                      step="0.1"
-                      placeholder="Ej: 2.5"
-                    />
-                    <div id="waterInfo"></div>
-                  </div>
-                  <div>
-                    <label for="notesInput" class="sub-label">Notas del día</label>
-                    <textarea
-                      id="notesInput"
-                      placeholder="Sensaciones, dolor en rodillas, energía, sueño, etc."
-                    ></textarea>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </div>
-        </section>
-
-        <!-- TAB PROGRESO -->
-        <section id="tab-progreso" class="tab-content">
-          <section class="card">
-            <div class="section-header-row">
-              <h2 class="card-title">Progreso del mes</h2>
-              <span class="section-subtitle">
+                  ">
+<div>
+<label class="sub-label" for="waterInput">Agua tomada (litros)</label>
+<input id="waterInput" min="0" placeholder="Ej: 2.5" step="0.1" type="number"/>
+<div id="waterInfo"></div>
+</div>
+<div>
+<label class="sub-label" for="notesInput">Notas del día</label>
+<textarea id="notesInput" placeholder="Sensaciones, dolor en rodillas, energía, sueño, etc."></textarea>
+</div>
+</div>
+</section>
+</div>
+</div>
+</section>
+<!-- TAB PROGRESO -->
+<section class="tab-content" id="tab-progreso">
+<section class="card p-3">
+<div class="section-header-row">
+<h2 class="card-title">Progreso del mes</h2>
+<span class="section-subtitle">
                 Avance diario de cumplimiento.
               </span>
-            </div>
-           <div id="monthGrid" class="month-grid"></div>
-           <div id="monthGrid" class="month-grid"></div>
-<div id="monthDaySummary" class="month-day-summary">
-  <span class="month-day-summary-placeholder">
+</div>
+<div class="month-grid" id="monthGrid"></div>
+
+<div class="month-day-summary" id="monthDaySummary">
+<span class="month-day-summary-placeholder">
     Haz clic en un día del mes para ver su progreso.
   </span>
 </div>
-
-
-
-            <div style="margin-top: 14px">
-              <h3 class="card-title">Peso y resumen</h3>
-              <ul id="weightHistory"></ul>
-            </div>
-          </section>
-        </section>
-
-        <!-- TAB MENÚS -->
-        <section id="tab-menus" class="tab-content">
-          <section class="card">
-            <h2 class="card-title">Ejemplos de menús opcionales</h2>
-            <p class="section-subtitle">
+<div style="margin-top: 14px">
+<h3 class="card-title">Peso y resumen</h3>
+<ul id="weightHistory"></ul>
+</div>
+</section>
+</section>
+<!-- TAB MENÚS -->
+<section class="tab-content" id="tab-menus">
+<section class="card p-3">
+<h2 class="card-title">Ejemplos de menús opcionales</h2>
+<p class="section-subtitle">
               Usa estas ideas cuando quieras variar, sin cambiar tu plan base.
             </p>
-            <div id="menusExamples"></div>
-          </section>
-        </section>
-
-        <!-- TAB PERFIL -->
-        <section id="tab-perfil" class="tab-content">
-          <section class="card">
-            <h2 class="card-title">Perfil y objetivos</h2>
-            <p class="section-subtitle">
+<div id="menusExamples"></div>
+</section>
+</section>
+<!-- TAB PERFIL -->
+<section class="tab-content" id="tab-perfil">
+<section class="card p-3">
+<h2 class="card-title">Perfil y objetivos</h2>
+<p class="section-subtitle">
               Ajusta tus datos y mira tu resumen de peso del mes.
             </p>
-
-            <div class="profile-grid" style="margin-top: 8px">
-              <div class="field-group">
-                <label for="profileName">Nombre</label>
-                <input type="text" id="profileName" placeholder="Nombre" />
-              </div>
-              <div class="field-group">
-                <label for="profileAge">Edad</label>
-                <input type="number" id="profileAge" min="0" />
-              </div>
-              <div class="field-group">
-                <label for="profileHeight">Estatura (cm)</label>
-                <input type="number" id="profileHeight" min="0" />
-              </div>
-              <div class="field-group">
-                <label for="profileStartWeight">Peso inicial (kg)</label>
-                <input type="number" id="profileStartWeight" step="0.1" />
-              </div>
-              <div class="field-group">
-                <label for="profileGoalCalories">Calorías objetivo/día</label>
-                <input
-                  type="number"
-                  id="profileGoalCalories"
-                  step="50"
-                  min="1200"
-                />
-              </div>
-              <div class="field-group">
-                <label for="profileWaterTarget">Meta de agua (L/día)</label>
-                <input
-                  type="number"
-                  id="profileWaterTarget"
-                  step="0.1"
-                  min="1"
-                />
-              </div>
-              <div class="field-group">
-                <label for="profileFinalWeight">Peso final del mes (kg)</label>
-                <input type="number" id="profileFinalWeight" step="0.1" />
-              </div>
-            </div>
-
-            <p id="monthStatusText"></p>
-            <p id="weightDiffText"></p>
-          </section>
-        </section>
-      </main>
-    </div>
-
-    <!-- BOTTOM TABS -->
-    <section class="bottom-tabs">
-      <div class="bottom-tabs-inner">
-        <button class="tab-button active" data-tab="tab-dia">
-          <span class="tab-icon">🏠</span>
+<div class="profile-grid" style="margin-top: 8px">
+<div class="field-group">
+<label for="profileName">Nombre</label>
+<input id="profileName" placeholder="Nombre" type="text"/>
+</div>
+<div class="field-group">
+<label for="profileAge">Edad</label>
+<input id="profileAge" min="0" type="number"/>
+</div>
+<div class="field-group">
+<label for="profileHeight">Estatura (cm)</label>
+<input id="profileHeight" min="0" type="number"/>
+</div>
+<div class="field-group">
+<label for="profileStartWeight">Peso inicial (kg)</label>
+<input id="profileStartWeight" step="0.1" type="number"/>
+</div>
+<div class="field-group">
+<label for="profileGoalCalories">Calorías objetivo/día</label>
+<input id="profileGoalCalories" min="1200" step="50" type="number"/>
+</div>
+<div class="field-group">
+<label for="profileWaterTarget">Meta de agua (L/día)</label>
+<input id="profileWaterTarget" min="1" step="0.1" type="number"/>
+</div>
+<div class="field-group">
+<label for="profileFinalWeight">Peso final del mes (kg)</label>
+<input id="profileFinalWeight" step="0.1" type="number"/>
+</div>
+</div>
+<p id="monthStatusText"></p>
+<p id="weightDiffText"></p>
+</section>
+</section>
+</main>
+</div>
+<!-- BOTTOM TABS -->
+<section class="bottom-tabs">
+<div class="tabs">
+<button class="tab-button active" data-tab="tab-dia">
+<span class="tab-icon">🏠</span>
           Día
         </button>
-        <button class="tab-button" data-tab="tab-progreso">
-          <span class="tab-icon">📊</span>
+<button class="tab-button" data-tab="tab-progreso">
+<span class="tab-icon">📊</span>
           Progreso
         </button>
-        <button class="tab-button" data-tab="tab-menus">
-          <span class="tab-icon">🍽️</span>
+<button class="tab-button" data-tab="tab-menus">
+<span class="tab-icon">🍽️</span>
           Menús
         </button>
-        <button class="tab-button" data-tab="tab-perfil">
-          <span class="tab-icon">👤</span>
+<button class="tab-button" data-tab="tab-perfil">
+<span class="tab-icon">👤</span>
           Perfil
         </button>
-      </div>
-    </section>
-  </body>
+</div>
+</section>
+</body>
 </html>

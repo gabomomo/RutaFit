@@ -1,21 +1,58 @@
 // firebase-init.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+// ✅ Firebase modular SDK v11.0.1 (single source of truth for the whole app)
 
-// 🔹 Usa los datos que Firebase te dio
-export const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROJECT_ID.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_PROJECT_ID.appspot.com",
-  messagingSenderId: "123456",
-  appId: "1:123456:web:abcdef",
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBH0euIL0ijvI_3oIGg8Xg4qWxqCzlqm3k",
+  authDomain: "planfitnessapp.firebaseapp.com",
+  projectId: "planfitnessapp",
+  storageBucket: "planfitnessapp.appspot.com", // revisa que coincida con la consola
+  messagingSenderId: "524553558424",
+  appId: "1:524553558424:web:d76a8d143e45b0e8d433ed",
+  measurementId: "G-ZMB64R3769"
 };
 
-// 🔹 Inicializar la app
 export const app = initializeApp(firebaseConfig);
-
-// 🔹 Servicios que vas a usar
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// Re-export helpers so every page imports from this file (avoids version mismatch errors)
+export {
+  onAuthStateChanged,
+  signOut,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp,
+};

@@ -1,0 +1,688 @@
+/* =====================================================================
+   PlanFitnessApp – Design System (Unified)
+   - Single source of truth for colors, typography, spacing, components.
+   - No inline CSS in HTML. Use classes from this file.
+   ===================================================================== */
+
+/* -----------------------------
+   1) Design Tokens
+------------------------------ */
+:root{
+  /* Brand / Accent */
+  --accent: #8b5cf6;
+  --accent-2: #4f46e5;
+  --accent-hover: #a78bfa;
+
+  /* Backgrounds */
+  --bg: #05030a;
+  --bg-grad-1: #1f152f;
+  --bg-grad-2: #05030a;
+
+  --surface: rgba(18, 13, 34, .72);
+  --surface-2: rgba(22, 15, 34, .82);
+  --surface-solid: #120d22;
+
+  /* Text */
+  --text: rgba(249, 250, 251, .96);
+  --text-strong: #f9fafb;
+  --text-muted: rgba(156, 163, 175, .92);
+
+  /* Borders / Shadows */
+  --stroke: rgba(255,255,255,.10);
+  --stroke-soft: rgba(255,255,255,.08);
+  --shadow: 0 12px 30px rgba(0,0,0,.45);
+
+  /* Radius / Spacing */
+  --r-lg: 18px;
+  --r-md: 14px;
+  --r-sm: 12px;
+
+  --s-1: 6px;
+  --s-2: 10px;
+  --s-3: 14px;
+  --s-4: 18px;
+  --s-5: 24px;
+
+  /* Action colors */
+  --danger: #ef4444;
+  --danger-hover: #f87171;
+
+  --warn: #facc15;
+  --info: #38bdf8;
+  --success: #22c55e;
+
+  /* Icon button defaults */
+  --icon-idle-bg: rgba(255,255,255,.08);
+  --icon-idle-stroke: rgba(255,255,255,.18);
+  --icon-idle-fg: rgba(255,255,255,.85);
+}
+
+/* -----------------------------
+   2) Global Base
+------------------------------ */
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(120,60,255,.18), transparent 70%),
+    radial-gradient(900px 500px at 85% 25%, rgba(0,200,255,.10), transparent 70%),
+    linear-gradient(180deg, var(--bg-grad-1), var(--bg-grad-2));
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a{ color: inherit; text-decoration: none; }
+a:hover{ text-decoration: underline; }
+
+hr.hr-soft{
+  border: none;
+  height: 1px;
+  background: var(--stroke-soft);
+  margin: var(--s-4) 0;
+}
+
+/* -----------------------------
+   3) Layout Helpers
+------------------------------ */
+.app-shell{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 84px; /* leave space for bottom nav */
+}
+
+@media (max-width: 576px){
+  .app-shell{ padding: 18px 14px 92px; }
+}
+
+/* -----------------------------
+   4) Surfaces / Cards
+------------------------------ */
+.glass-card{
+  background: var(--surface);
+  border: 1px solid var(--stroke-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.card,
+.section-card,
+.top-card,
+.card-header{
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.card-body{
+  background-color: #212529;
+  border-radius: 40px;
+}
+
+.modal-body{
+  background-color: #212529;
+  border-radius: 40px;
+  padding: 20px;
+  margin: 20px;
+}
+/* Optional highlight card */
+.card-primary{
+  border-color: rgba(139, 92, 246, .45);
+  box-shadow: 0 0 0 1px rgba(139,92,246,.12), var(--shadow);
+}
+
+/* -----------------------------
+   5) Top Bars
+------------------------------ */
+.top-bar,
+.top-card{
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.top-bar-left{ display:flex; align-items:center; gap: 10px; }
+.top-bar-right{ display:flex; align-items:center; gap: 10px; }
+
+.top-left{display: flex; align-items: center; gap: 10px;}
+
+.top-avatar,
+.admin-avatar,
+.avatar-circle{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  display: grid;
+  place-items: center;
+  color: #0b0714;
+  font-weight: 800;
+}
+
+/* "Hola Nombre" */
+.top-hello{ display:flex; gap: 6px; align-items: baseline; }
+.top-hello span:first-child{ color: var(--text-muted); }
+
+/* -----------------------------
+   6) Typography
+------------------------------ */
+.h-title{
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0;
+}
+.h-sub{
+  color: var(--text-muted);
+  font-size: .92rem;
+  margin: 2px 0 0;
+}
+
+.sub-label{
+  color: var(--text-muted);
+  font-size: .85rem;
+}
+
+.muted{ color: var(--text-muted) !important; }
+
+.dark-text{color: var(--bg);}
+/* -----------------------------
+   7) Buttons
+------------------------------ */
+.btn-soft,
+.logout-btn{
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: var(--text-strong);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 600;
+}
+
+.btn-soft:hover,
+.logout-btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.20);
+}
+
+.btn-accent{
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border: none;
+  color: #0b0714;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 10px 16px;
+}
+
+.btn-accent:hover{ filter: brightness(1.08); }
+
+.btn-danger-solid{
+  background: var(--danger);
+  border: none;
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 800;
+}
+.btn-danger-solid:hover{ background: var(--danger-hover); }
+
+/* Bootstrap button unification */
+.btn.btn-primary{
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border: none;
+  color: #0b0714;
+  font-weight: 800;
+  border-radius: 999px;
+}
+.btn.btn-primary:hover{ filter: brightness(1.08); }
+
+.btn.btn-danger{
+  background: var(--danger);
+  border: none;
+  border-radius: 999px;
+  font-weight: 800;
+}
+.btn.btn-danger:hover{ background: var(--danger-hover); }
+
+.btn.btn-outline-light{
+  border-color: rgba(255,255,255,.28);
+}
+
+/* -----------------------------
+   8) Forms
+------------------------------ */
+.form-control, .form-select, textarea{
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: var(--text) !important;
+  border-radius: var(--r-md) !important;
+}
+
+.form-control::placeholder{ color: rgba(255,255,255,.45); }
+
+.form-control:focus, .form-select:focus, textarea:focus{
+  border-color: rgba(139,92,246,.70) !important;
+  box-shadow: 0 0 0 3px rgba(139,92,246,.18) !important;
+}
+
+/* Make Bootstrap labels consistent on dark */
+.form-label{ color: rgba(249,250,251,.88); }
+
+/* -----------------------------
+   9) Tables / Data grids
+------------------------------ */
+.table{
+  color: var(--text) !important;
+}
+
+.table > :not(caption) > * > *{
+background-color: transparent !important;
+border-bottom-width: 0 !important
+}
+
+.table thead th{
+  color: rgba(156,163,175,.95) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: .78rem;
+  letter-spacing: .04em;
+}
+.table tbody td{
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+.table-wrap{
+  overflow: auto;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--stroke-soft);
+}
+
+/* -----------------------------
+   10) Progress
+------------------------------ */
+.progress{
+  background: rgba(255,255,255,.08);
+  border-radius: 999px;
+  height: 10px;
+}
+.progress-bar{
+  background: linear-gradient(90deg, #b88bff, #8b5cf6);
+}
+
+/* -----------------------------
+   11) Bottom Navigation
+------------------------------ */
+.bottom-tabs{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(10, 8, 16, .92);
+  border-top: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(12px);
+  padding: 10px 10px 14px;
+  z-index: 999;
+}
+
+.bottom-tabs .tabs{
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tab-button{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  color: rgba(255,255,255,.65);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.tab-button i{ font-size: 1.1rem; }
+.tab-button.active{
+  color: #0b0714;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border-color: rgba(255,255,255,.0);
+}
+.tab-button:hover{
+  border-color: rgba(255,255,255,.18);
+}
+
+/* -----------------------------
+   12) Icon Buttons (Admin actions)
+------------------------------ */
+.icon-btn{
+  width: 32px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(200,239,58);
+  color: #0f172a ;
+  border-radius: 12px;
+  color: rgba(255,255,255,.92);
+  transition: transform .15s ease, filter .15s ease, background .15s ease, border-color .15s ease;
+
+  
+}
+.icon-btn:hover{
+  transform: translateY(-1px) scale(1.06);
+  filter: brightness(1.06);
+  border-color: rgba(255,255,255,.22);
+}
+
+/* Solid colored states (when "active") */
+.icon-solid-edit{ background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-color: transparent; color:#0b0714; }
+.icon-solid-delete{ background: var(--danger); border-color: transparent; color:#fff; }
+.icon-solid-plan{ background: var(--warn); border-color: transparent; color:#0b0714; }
+.icon-solid-routine{ background: var(--info); border-color: transparent; color:#0b0714; }
+
+/* Inactive grey (when user has no plan/routine) */
+.icon-inactive{
+  background: var(--icon-idle-bg);
+  border-color: var(--icon-idle-stroke);
+  color: var(--icon-idle-fg);
+}
+
+/* -----------------------------
+   13) Utility
+------------------------------ */
+.hide{ display:none !important; }
+.gap-12{ gap: 12px !important; }
+.round-lg{ border-radius: var(--r-lg) !important; }
+
+
+/* ==========================================================
+   THEME: Fitness & Macro (Light background + Lime accent)
+   Goal: white-ish background, dark cards (not pure black),
+   lime/yellow-green highlights and buttons.
+   This patch intentionally overrides earlier tokens/styles.
+   ========================================================== */
+
+:root{
+  /* Surfaces */
+  --body-bg: #f6f7f9;
+  --surface: #ffffff;
+  --card: #1f2328;          /* dark, not black */
+  --card-2: #232a30;        /* slightly lighter for cards */
+  --stroke: rgba(0,0,0,.10);
+  --stroke-soft: rgba(0,0,0,.06);
+
+  /* Text */
+  --text: #0f172a;
+  --muted: rgba(15, 23, 42, .60);
+
+  /* On dark cards */
+  --on-card: rgba(255,255,255,.92);
+  --on-card-muted: rgba(255,255,255,.65);
+
+  /* Accent */
+  --accent: #c8ef3a;        /* lime/yellow-green */
+  --accent-2: #b7df2f;
+  --accent-ink: #0b0f14;
+
+  /* States */
+  --danger: #ff4d4f;
+  --warning: #facc15;
+  --success: #22c55e;
+
+  /* Radius / shadow */
+  --radius-lg: 18px;
+  --shadow-card: 0 18px 40px rgba(15, 23, 42, .12);
+}
+
+/* Base page */
+html, body{
+  background: var(--body-bg) !important;
+  color: var(--text) !important;
+}
+
+/* Remove old gradient / dark page background if present */
+body{
+  background-image: none !important;
+  min-height: 100vh;
+}
+
+/* Global typography helpers */
+.text-muted, .muted{
+  color: var(--muted) !important;
+}
+
+/* Cards (glass-card used throughout the app) */
+.glass-card,
+.card.glass-card{
+  background: var(--card-2) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  color: var(--on-card) !important;
+  backdrop-filter: none !important; /* crisp on light background */
+}
+
+/* Headings inside dark cards */
+.glass-card h1,
+.glass-card h2,
+.glass-card h3,
+.glass-card h4,
+.glass-card h5,
+.glass-card h6{
+  color: var(--on-card) !important;
+}
+
+/* Muted text inside cards */
+.glass-card .text-muted,
+.glass-card .muted{
+  color: var(--on-card-muted) !important;
+}
+
+/* Highlight text */
+.ds-accent,
+.text-accent{
+  color: var(--accent) !important;
+}
+
+/* Buttons */
+.btn-primary,
+.btn.btn-primary{
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-ink) !important;
+  font-weight: 700;
+  border-radius: 999px;
+  box-shadow: 0 10px 18px rgba(200, 239, 58, .22);
+}
+.btn-primary:hover,
+.btn.btn-primary:hover{
+  background: var(--accent-2) !important;
+  border-color: var(--accent-2) !important;
+  color: var(--accent-ink) !important;
+}
+.btn-primary:disabled,
+.btn.btn-primary:disabled{
+  opacity: .55;
+  box-shadow: none;
+}
+
+/* Secondary / neutral buttons */
+.btn-secondary,
+.btn.btn-secondary{
+  background: rgba(15, 23, 42, .06) !important;
+  border-color: rgba(15, 23, 42, .12) !important;
+  color: var(--text) !important;
+  border-radius: 999px;
+}
+.btn-secondary:hover,
+.btn.btn-secondary:hover{
+  background: rgba(200, 239, 58, .18) !important;
+  border-color: rgba(200, 239, 58, .55) !important;
+}
+
+/* Danger button (logout etc) */
+.btn-danger,
+.btn.btn-danger{
+  background: var(--danger) !important;
+  border-color: var(--danger) !important;
+  color: #fff !important;
+  border-radius: 999px;
+}
+
+/* Soft / icon buttons used in admin grid */
+.btn-soft{
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(200,239,58) !important;
+  color: #0f172a !important;
+  border-radius: 12px !important;
+}
+.btn-soft:hover{
+  background: rgba(200,239,58,.16) !important;
+  border-color: rgba(200,239,58,.55) !important;
+  color: #0f172a!important;
+}
+
+.btn.btn-outline-primary{
+  border-color: rgba(200,239,58,.55) !important;
+  color: var(--on-card) !important;
+}
+
+.btn-soft-editar{
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(200,239,58) !important;
+  color: #FFF !important;
+  border-radius: 12px !important;
+}
+
+.btn-soft-editar:hover{
+  background: rgba(200,239,58) !important;
+  border-color: rgba(200,239,58,.55) !important;
+  color: #0f172a!important;
+}
+
+/* Inputs:
+   - Default inputs (outside cards): light
+   - Inputs inside cards: dark */
+.form-control,
+.form-select{
+  border: 1px solid var(--stroke) !important;
+  color: var(--text) !important;
+  border-radius: 12px !important;
+}
+.form-control:focus,
+.form-select:focus{
+  box-shadow: 0 0 0 .2rem rgba(200,239,58,.22) !important;
+  border-color: rgba(200,239,58,.70) !important;
+}
+
+/* Inputs inside dark cards */
+.glass-card .form-control,
+.glass-card .form-select{
+  border-color: rgba(255,255,255,.14) !important;
+  color: var(--on-card) !important;
+}
+.glass-card .form-control::placeholder{
+  color: rgba(255,255,255,.45) !important;
+}
+
+/* Tables (nutrition / admin) */
+.table-darkish{
+  color: var(--on-card) !important;
+}
+.table-darkish thead th{
+  background: rgba(255,255,255,.07) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+.table-darkish tbody td{
+  color: var(--on-card) !important;
+}
+
+/* Progress bars */
+.progress{
+  background: rgba(15, 23, 42, .10) !important;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar{
+  background: var(--accent) !important;
+}
+
+/* Bottom / side navigation (tabs) */
+.tabs,
+.bottom-tabs,
+.bottom-nav{
+  background: var(--card) !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+.tabs .tab,
+.bottom-tabs .tab,
+.bottom-nav .tab{
+  color: rgba(255,255,255,.70) !important;
+}
+.tabs .tab.active,
+.bottom-tabs .tab.active,
+.bottom-nav .tab.active{
+  color: var(--accent) !important;
+}
+.tabs .tab.active .bi,
+.bottom-tabs .tab.active .bi,
+.bottom-nav .tab.active .bi{
+  color: var(--accent) !important;
+}
+
+/* Small badges / pills */
+.pill,
+.badge,
+.badge-pill{
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: rgba(255,255,255,.86) !important;
+  border-radius: 999px !important;
+}
+.pill.accent,
+.badge.accent{
+  background: rgba(200,239,58,.18) !important;
+  border-color: rgba(200,239,58,.55) !important;
+  color: var(--accent) !important;
+}
+/* ===== Text muted – usar verde del app ===== */
+.text-muted {
+  color: rgba(170, 255, 60, 0.75) !important; /* verde lima del app */
+}
+
+/* Variación más sutil si se usa dentro de cards */
+.card .text-muted,
+.glass-card .text-muted {
+  color: rgba(170, 255, 60, 0.6) !important;
+}
+
+.loading-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.ds-loading-text{
+  color: var(--accent, #b7ff1a); /* verde app */
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+.ds-spinner{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 3px solid rgba(183,255,26,.25);
+  border-top-color: rgba(183,255,26,.95);
+  animation: dsSpin .9s linear infinite;
+}
+
+@keyframes dsSpin{
+  to{ transform: rotate(360deg); }
+}

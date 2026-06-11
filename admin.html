@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel Administrativo - Plan Fitness</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap 5 -->
+  <!-- Estilos base (puedes apuntar a tu style.css general si quieres) -->
+
+  <!-- Bootstrap -->
+  <!-- App Design System -->
+  
+  <!-- Bootstrap (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- App unified CSS -->
+  <link rel="stylesheet" href="./style.ds.css">
+
+</head>
+<body>
+  <div class="app-shell">
+    <!-- TOP BAR -->
+    <header class="top-card">
+      <div class="top-left">
+        <div class="admin-avatar" id="adminAvatar">A</div>
+        <div>
+          <div class="top-text-main">Panel Administrativo</div>
+          <div class="top-text-sub">
+            Sesión iniciada como:
+            <span id="adminSessionEmail" class="fw-semibold"></span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button id="btnLogoutAdmin" class="btn btn-danger">
+          <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main>
+      <!-- Usuarios del plan -->
+      <section class="card card-dark mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-0">Usuarios del plan</h5>
+            <small>Administra las personas asociadas al plan de entrenamiento y nutrición.</small>
+          </div>
+          <button id="btnNewPlanUser" class="btn btn-primary">
+            + Nuevo usuario del plan
+          </button>
+        </div>
+        <div class="card-body pt-3">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 50px;">#</th>
+                  <th scope="col">Usuario</th>
+                  <th scope="col">Ubicación</th>
+                  <th scope="col" style="width: 130px;">Teléfono</th>
+                  <th scope="col" style="width: 130px;">Creado</th>
+                  <th scope="col" class="text-end" style="width: 170px;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="planUsersTableBody">
+                <tr id="loadingRow">
+                  <td colspan="6" class="text-center py-5">
+                    <div class="loading-wrap">
+                      <div class="ds-spinner" aria-hidden="true"></div>
+                      <div class="ds-loading-text">Cargando usuarios...</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: Crear / Editar usuario del plan -->
+  <div
+    class="modal fade"
+    id="userModal"
+    tabindex="-1"
+    aria-labelledby="userModalTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <form id="userForm">
+          <input type="hidden" id="userDocId" />
+
+          <div class="modal-header border-0 pb-2">
+            <h5 class="modal-title" id="userModalTitle">Crear uevo usuario del plan</h5>
+            <button id="btnLogoutAdmin" class="btn btn-danger btn-logout"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</button>
+          </div>
+
+          <div class="modal-body pt-0">
+            <div class="row g-3">
+              <!-- Nombre / Apellidos -->
+              <div class="col-md-6">
+                <label for="userFirstName" class="form-label">Nombre *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userFirstName"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="userLastName" class="form-label">Apellidos *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userLastName"
+                  required
+                />
+              </div>
+
+              <!-- Email / Teléfono -->
+              <div class="col-md-6">
+                <label for="userEmail" class="form-label">Email *</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="userEmail"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="userPhone" class="form-label">Teléfono *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userPhone"
+                  required
+                />
+              </div>
+
+              <!-- País / Región -->
+              <div class="col-md-6">
+                <label for="userCountry" class="form-label">País *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userCountry"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="userRegion" class="form-label">Ciudad / Provincia *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userRegion"
+                  required
+                />
+              </div>
+
+              <!-- Dirección / CP -->
+              <div class="col-md-8">
+                <label for="userAddress" class="form-label">Dirección *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userAddress"
+                  required
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="userPostalCode" class="form-label">Código postal</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userPostalCode"
+                />
+              </div>
+
+              <!-- Contraseña provisional -->
+              <div class="col-md-6">
+                <label for="userPassword" class="form-label">
+                  Contraseña provisional
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="userPassword"
+                  placeholder="Mínimo 6 caracteres"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="userPasswordConfirm" class="form-label">
+                  Repetir contraseña
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="userPasswordConfirm"
+                />
+              </div>
+
+              <!-- Notas -->
+              <div class="col-12">
+                <label for="userNotes" class="form-label">Notas del plan (opcional)</label>
+                <textarea
+                  id="userNotes"
+                  rows="2"
+                  class="form-control"
+                  placeholder="Ej: Plan enfocado en recomposición corporal, restricción de rodilla derecha, etc."
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer border-0 pt-0">
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="btnSaveUser"
+            >
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Lógica del panel admin -->
+  <script type="module" src="./admin.js"></script>
+</body>
+</html>
