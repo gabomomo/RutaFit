@@ -516,3 +516,353 @@ body.logged-out{
   color: var(--text-muted);
   min-height: 20px;
 }
+/* =====================================================================
+   App Components – Main app (index.html)
+   ===================================================================== */
+
+/* --- Cards (override Bootstrap transparent reset) --- */
+.card.p-3,
+.section-card{
+  background: var(--surface) !important;
+  border: 1px solid var(--stroke-soft) !important;
+  border-radius: var(--r-lg) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+/* --- Layout two columns --- */
+.layout-two-col{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 768px){
+  .layout-two-col{ grid-template-columns: 1fr; }
+}
+.col-left, .col-right{ display: flex; flex-direction: column; gap: 16px; }
+
+/* --- Section headers inside cards --- */
+.section-header-row{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+.card-title{
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: var(--text-strong) !important;
+  margin: 0 !important;
+}
+.section-subtitle{
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+
+/* --- Day header --- */
+.day-header{ margin: 8px 0 4px; }
+.day-header-left{ display: flex; flex-direction: column; gap: 2px; }
+.day-header-right{ text-align: right; }
+.day-name{
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.day-focus{
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+.section-header-row.row-split{
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* --- Custom Progress bar (not Bootstrap's) --- */
+.progress-wrapper-main{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.progress-label{
+  font-size: .8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.progress-wrapper-main .progress-bar{
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,.10);
+  border-radius: 999px;
+  overflow: hidden;
+  /* Reset Bootstrap class */
+  display: block !important;
+}
+.progress-fill{
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  border-radius: 999px;
+  transition: width .4s ease;
+  width: 0%;
+}
+.progress-percent-main{
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--accent-hover);
+  white-space: nowrap;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* --- Day status badge --- */
+.badge-status{
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* --- Outline button variant --- */
+.btn.btn-outline,
+.btn-outline{
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.22);
+  color: var(--text-strong);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn.btn-outline:hover,
+.btn-outline:hover{
+  background: rgba(255,255,255,.08);
+}
+
+/* --- Native inputs & selects (no Bootstrap class) --- */
+input:not([type="checkbox"]):not([type="radio"]):not(.form-control),
+select:not(.form-select):not(.form-control),
+textarea:not(.form-control){
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--text);
+  border-radius: var(--r-sm);
+  padding: 8px 12px;
+  font-size: .9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s;
+  width: 100%;
+}
+input:not([type="checkbox"]):not([type="radio"]):not(.form-control):focus,
+select:not(.form-select):not(.form-control):focus,
+textarea:not(.form-control):focus{
+  border-color: rgba(139,92,246,.70);
+  box-shadow: 0 0 0 3px rgba(139,92,246,.18);
+}
+input::placeholder, textarea::placeholder{ color: rgba(255,255,255,.35); }
+select option{ background: #1a1328; color: var(--text); }
+
+/* --- Exercise checkboxes --- */
+.exercise-checkbox{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: .9rem;
+  color: var(--text);
+  user-select: none;
+}
+.exercise-checkbox input[type="checkbox"]{
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.exercise-checkbox .checkmark{ display: none; } /* replaced by native checkbox */
+
+/* --- Exercise mode row --- */
+.exercise-mode{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.exercise-mode-left{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+}
+.exercise-mode-right{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.toggle-label{
+  font-size: .78rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* --- Toggle switch --- */
+.toggle-switch{
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+.toggle-switch input{ opacity: 0; width: 0; height: 0; }
+.toggle-slider{
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.12);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.toggle-slider:before{
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 999px;
+  transition: transform .2s;
+}
+.toggle-switch input:checked + .toggle-slider{ background: var(--accent); }
+.toggle-switch input:checked + .toggle-slider:before{ transform: translateX(18px); }
+
+/* --- Training block --- */
+.training-content{ margin-top: 8px; }
+.training-title{
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0 0 8px;
+}
+.training-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.training-list li{
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--stroke-soft);
+  border-radius: var(--r-sm);
+  padding: 8px 12px;
+  font-size: .88rem;
+  color: var(--text);
+}
+
+/* --- Month progress grid --- */
+.month-grid{
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+@media (max-width: 480px){ .month-grid{ grid-template-columns: repeat(5, 1fr); } }
+
+.month-day-cell{
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--stroke-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s;
+  color: var(--text-muted);
+}
+.month-day-cell:hover{ transform: scale(1.08); }
+.month-day-cell.done{ background: var(--accent); color: #0b0714; border-color: transparent; }
+.month-day-cell.partial{ background: rgba(139,92,246,.35); color: var(--text-strong); }
+.month-day-cell.today{ border-color: var(--accent); }
+
+.month-day-summary{
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--stroke-soft);
+  border-radius: var(--r-md);
+  padding: 14px;
+  min-height: 60px;
+  font-size: .88rem;
+  color: var(--text);
+}
+.month-day-summary-placeholder{ color: var(--text-muted); font-size: .85rem; }
+
+/* --- Profile grid --- */
+.profile-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 480px){ .profile-grid{ grid-template-columns: 1fr; } }
+
+.field-group{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.field-group label{
+  font-size: .82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* --- Tab content visibility --- */
+.tab-content{ display: none; }
+.tab-content.active{ display: block; }
+
+/* --- Meal list --- */
+#mealsContainer .meal-block{
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.04);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--stroke-soft);
+}
+#mealsContainer .meal-label{
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--accent-hover);
+  margin-bottom: 4px;
+}
+#mealsContainer .meal-desc{
+  font-size: .88rem;
+  color: var(--text);
+}
+
+/* --- Portion target list --- */
+#portionTargets{
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#portionTargets li{
+  font-size: .85rem;
+  color: var(--text-muted);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--stroke-soft);
+}
+
+/* --- Water info / misc text --- */
+#waterInfo{
+  font-size: .8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
