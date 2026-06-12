@@ -267,32 +267,32 @@ function saveState() {
 // --------------------------------------------------------------------------
 
 function getConfigDay(userConfig, dayId) {
-  if (!userConfig || !userConfig.days) return null;
-  return userConfig.days.find((d) => d.id === dayId) || null;
+  if (!CONFIG || !Array.isArray(CONFIG.days)) return null;
+  return CONFIG.days.find((d) => d.id === dayId) || null;
+}
+
+function _userKey(userId) {
+  return userId.charAt(0).toUpperCase() + userId.slice(1);
 }
 
 function getConfigDayNutrition(dayConfig) {
-  if (!dayConfig || !dayConfig.nutritionKey) return null;
-  if (!CONFIG || !Array.isArray(CONFIG.nutrition)) return null;
-  return CONFIG.nutrition.find((n) => n.key === dayConfig.nutritionKey) || null;
+  if (!dayConfig || !ACTIVE_USER_ID) return null;
+  return dayConfig["nutrition" + _userKey(ACTIVE_USER_ID)] || null;
 }
 
 function getConfigDayTraining(dayConfig) {
-  if (!dayConfig || !dayConfig.trainingKey) return null;
-  if (!CONFIG || !Array.isArray(CONFIG.trainings)) return null;
-  return (
-    CONFIG.trainings.find((t) => t.key === dayConfig.trainingKey) || {
-      blocks: []
-    }
-  );
+  if (!dayConfig || !ACTIVE_USER_ID) return { title: "Rutina de hoy", blocks: [] };
+  const trainingInfo = dayConfig["training" + _userKey(ACTIVE_USER_ID)] || {};
+  const blocks = (dayConfig.trainingBlocks || []).map((key) => ({
+    key,
+    label: key.replace(/_/g, " "),
+    exercises: (CONFIG.trainings && CONFIG.trainings[key]) || []
+  }));
+  return { title: trainingInfo.title || "Rutina de hoy", blocks };
 }
 
-function getUserMenusConfig(userConfig) {
-  if (!CONFIG || !Array.isArray(CONFIG.menus)) return [];
-  const ids =
-    (userConfig && Array.isArray(userConfig.menuKeys) && userConfig.menuKeys) ||
-    [];
-  return CONFIG.menus.filter((m) => ids.includes(m.key));
+function getUserMenusConfig() {
+  return (CONFIG && Array.isArray(CONFIG.menuExamples)) ? CONFIG.menuExamples : [];
 }
 
 // --------------------------------------------------------------------------
@@ -545,12 +545,12 @@ function renderTopBarUser() {
 function renderDayHeader(userConfig, dayConfig, dayState) {
   if (!dayConfig) return;
 
-  const dayName = `Día ${dayConfig.id}`;
-  setText("dayName", dayName);
+  setText("dayName", dayConfig.name || `Día ${dayConfig.id}`);
 
-  setText("nutritionFocus", dayConfig.nutritionFocus || "");
+  const nutritionConfig = getConfigDayNutrition(dayConfig);
+  setText("nutritionFocus", (nutritionConfig && nutritionConfig.focus) || "");
 
-  const goalCalories = userConfig && userConfig.caloriesGoal;
+  const goalCalories = userConfig && (userConfig.goalCalories || userConfig.caloriesGoal);
   const caloriesText = goalCalories
     ? `~${goalCalories.toLocaleString("es-CR")} kcal`
     : "~2400 kcal";
@@ -579,7 +579,6 @@ function renderNutritionSection(dayConfig, dayState) {
   const nutritionConfig = getConfigDayNutrition(dayConfig);
   if (!nutritionConfig) return;
 
-  // Marcamos los checkboxes según dayState
   const n = dayState.nutrition || {};
   const map = {
     chkProt: "proteins",
@@ -590,18 +589,31 @@ function renderNutritionSection(dayConfig, dayState) {
     chkLact: "lacteos",
     chkWhey: "whey"
   };
-
   Object.entries(map).forEach(([id, key]) => {
     const el = document.getElementById(id);
-    if (!el) return;
-    el.checked = !!n[key];
+    if (el) el.checked = !!n[key];
   });
 
-  // Texto auxiliar
-  setText(
-    "nutritionShortDesc",
-    nutritionConfig.shortLabel || "Guía de porciones diarias."
-  );
+  // Whey timing
+  setText("wheyTimingLabel", nutritionConfig.wheyTiming || "");
+
+  // Comidas del día
+  const mealsContainer = document.getElementById("mealsContainer");
+  if (mealsContainer && Array.isArray(nutritionConfig.meals)) {
+    mealsContainer.innerHTML = nutritionConfig.meals
+      .map((m) => `<div class="meal-block"><div class="meal-label">${m.name}</div><div class="meal-desc">${m.text}</div></div>`)
+      .join("");
+  }
+
+  // Porciones objetivo
+  const portionTargets = document.getElementById("portionTargets");
+  if (portionTargets && nutritionConfig.portions) {
+    const p = nutritionConfig.portions;
+    const labels = { protein: "Proteína", carbs: "Carbohidratos", fats: "Grasas saludables", veggies: "Vegetales", fruits: "Frutas", dairy: "Lácteo" };
+    portionTargets.innerHTML = Object.entries(labels)
+      .map(([k, label]) => p[k] != null ? `<li>${label}: ${p[k]} porciones</li>` : "")
+      .join("");
+  }
 }
 
 // Entrenamiento
@@ -628,9 +640,12 @@ function renderTrainingSection(dayConfig, dayState) {
   setText("gymRoutineTitle", trainingConfig.title || "Rutina de hoy");
   setHTML(
     "gymRoutineBlocks",
-    trainingConfig.blocks
-      .map((b) => `<li>${b.label}</li>`)
-      .join("")
+    trainingConfig.blocks.map((b) => {
+      const exHtml = b.exercises.length
+        ? `<ul class="training-exercises">${b.exercises.map((e) => `<li>${e}</li>`).join("")}</ul>`
+        : "";
+      return `<li><strong>${b.label}</strong>${exHtml}</li>`;
+    }).join("")
   );
 }
 
@@ -693,8 +708,8 @@ function renderDayProgress(dayConfig, dayState) {
   dayState = dayState || getDayState(ACTIVE_USER_ID, currentDayId);
 
   const pct = calculateDayProgress(dayConfig, dayState);
-  const bar = document.getElementById("dayProgressFill");
-  const label = document.getElementById("dayProgressPercent");
+  const bar = document.getElementById("dayTotalFill");
+  const label = document.getElementById("dayTotalPercent");
 
   if (bar) bar.style.width = `${pct}%`;
   if (label) label.textContent = `${pct}%`;
@@ -748,38 +763,21 @@ function updateTrainingFromUI() {
 // --------------------------------------------------------------------------
 
 function renderMenusTab(userConfig) {
-  const container = document.getElementById("menusList");
+  const container = document.getElementById("menusExamples");
   if (!container) return;
 
-  const menus = getUserMenusConfig(userConfig);
+  const menus = getUserMenusConfig();
   if (!menus.length) {
-    container.innerHTML = "<p>No hay menús configurados todavía.</p>";
+    container.innerHTML = "<p class='section-subtitle'>No hay menús configurados todavía.</p>";
     return;
   }
 
   container.innerHTML = menus
-    .map(
-      (m) => `
-      <article class="card mb-3">
-        <div class="card-body">
-          <h3 class="card-title h6 mb-2">${m.title}</h3>
-          <p class="small text-muted mb-1">${m.desc || ""}</p>
-          ${
-            m.items && m.items.length
-              ? `<ul class="mb-0 small">
-                  ${m.items
-                    .map(
-                      (it) =>
-                        `<li><strong>${it.name}</strong>: ${it.detail || ""}</li>`
-                    )
-                    .join("")}
-                 </ul>`
-              : ""
-          }
-        </div>
-      </article>
-    `
-    )
+    .map((m) => `
+      <div class="meal-block">
+        <div class="meal-label">${m.title}</div>
+        <div class="meal-desc">${m.text || ""}</div>
+      </div>`)
     .join("");
 }
 
@@ -816,39 +814,27 @@ function renderProgressTab(userConfig) {
     const cells = [];
     for (let d = 1; d <= MAX_DAYS; d++) {
       const dayState = getDayState(ACTIVE_USER_ID, d);
-      const pct = calculateDayProgress(
-        getConfigDay(userConfig, d),
-        dayState
-      );
-      cells.push(
-        `<div class="month-day-summary">
-          <div class="small">Día ${d}</div>
-          <div class="small text-muted">${pct}% completado</div>
-        </div>`
-      );
+      const pct = calculateDayProgress(getConfigDay(userConfig, d), dayState);
+      const cls = dayState.closed ? "done" : pct > 0 ? "partial" : "";
+      cells.push(`<div class="month-day-cell ${cls}" title="Día ${d}: ${pct}%">${d}</div>`);
     }
     monthGridEl.innerHTML = cells.join("");
   }
 }
 
 function renderProfileTab(userConfig) {
-  const profileNameEl = document.getElementById("profileName");
-  const profileGoalEl = document.getElementById("profileGoal");
-  const profileCaloriesEl = document.getElementById("profileCalories");
-  const profileNotesEl = document.getElementById("profileNotes");
-
   if (!userConfig) return;
 
-  if (profileNameEl) profileNameEl.textContent = userConfig.label || "";
-  if (profileGoalEl)
-    profileGoalEl.textContent = userConfig.goal || "Meta general del plan.";
-  if (profileCaloriesEl) {
-    profileCaloriesEl.textContent = userConfig.caloriesGoal
-      ? `${userConfig.caloriesGoal.toLocaleString("es-CR")} kcal diarias`
-      : "Meta de calorías no definida.";
-  }
-  if (profileNotesEl) {
-    profileNotesEl.textContent =
-      userConfig.notes || "Este es tu plan personal de 30 días.";
-  }
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.value = val; };
+  set("profileName", userConfig.label);
+  set("profileAge", userConfig.age);
+  set("profileHeight", userConfig.height);
+  set("profileStartWeight", userConfig.startWeight);
+  set("profileGoalCalories", userConfig.goalCalories || userConfig.caloriesGoal);
+  set("profileWaterTarget", userConfig.waterTargetLiters);
+
+  const u = getUserState(ACTIVE_USER_ID);
+  set("profileFinalWeight", u.metrics.weightCurrent);
+  setText("weightDiffText", "");
+  setText("monthStatusText", "");
 }
