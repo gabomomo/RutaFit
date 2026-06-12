@@ -351,6 +351,14 @@ async function initApp() {
 
   const daySelector = document.getElementById("daySelect");
   if (daySelector) {
+    // Populate options Día 1–30
+    daySelector.innerHTML = "";
+    for (let d = 1; d <= MAX_DAYS; d++) {
+      const opt = document.createElement("option");
+      opt.value = String(d);
+      opt.textContent = `Día ${d}`;
+      daySelector.appendChild(opt);
+    }
     daySelector.value = String(currentDayId);
     daySelector.addEventListener("change", (e) => {
       currentDayId = parseInt(e.target.value, 10);

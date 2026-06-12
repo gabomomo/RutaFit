@@ -35,7 +35,7 @@
 </div>
 <div class="day-header-right">
 <span class="sub-label">Calorías objetivo</span><br/>
-<strong>~<span id="caloriesHintSpan">2400</span> kcal</strong>
+<strong>~<span id="caloriesGoalLabel">2400</span> kcal</strong>
 </div>
 </div>
 <div class="day-header">
@@ -62,7 +62,7 @@
             justify-content: space-between;
             align-items: center;
           ">
-<span class="badge-status" id="dayStatusLabel">🟡 Día en curso</span>
+<span class="badge-status" id="badgeDayStatus">🟡 Día en curso</span>
 <button class="btn btn-outline" id="btnCloseDay">
             🔒 Cerrar día
           </button>
@@ -90,12 +90,12 @@
                     gap: 6px;
                   ">
 <label class="exercise-checkbox">
-<input id="chkProtein" type="checkbox"/>
+<input id="chkProt" type="checkbox"/>
 <span class="checkmark"></span>
 <span>Proteínas</span>
 </label>
 <label class="exercise-checkbox">
-<input id="chkCarbs" type="checkbox"/>
+<input id="chkCarb" type="checkbox"/>
 <span class="checkmark"></span>
 <span>Carbohidratos</span>
 </label>
@@ -115,7 +115,7 @@
 <span>Frutas</span>
 </label>
 <label class="exercise-checkbox">
-<input id="chkDairy" type="checkbox"/>
+<input id="chkLact" type="checkbox"/>
 <span class="checkmark"></span>
 <span>Lácteo</span>
 </label>
@@ -177,10 +177,10 @@
 </div>
 <!-- Bloque Gym -->
 <div class="training-content" id="trainingContent">
-<h3 class="training-title" id="trainingTitle">
+<h3 class="training-title" id="gymRoutineTitle">
                     Rutina de hoy
                   </h3>
-<ul class="training-list" id="trainingDetails"></ul>
+<ul class="training-list" id="gymRoutineBlocks"></ul>
 <div class="progress-wrapper-main" style="margin-top: 6px">
 <span class="progress-label">Progreso entrenamiento (Gym):</span>
 <div class="progress-bar">
@@ -205,13 +205,13 @@
                     margin-top: 8px;
                   ">
 <div>
-<label class="sub-label" for="waterInput">Agua tomada (litros)</label>
-<input id="waterInput" min="0" placeholder="Ej: 2.5" step="0.1" type="number"/>
+<label class="sub-label" for="waterCurrent">Agua tomada (litros)</label>
+<input id="waterCurrent" min="0" placeholder="Ej: 2.5" step="0.1" type="number"/>
 <div id="waterInfo"></div>
 </div>
 <div>
-<label class="sub-label" for="notesInput">Notas del día</label>
-<textarea id="notesInput" placeholder="Sensaciones, dolor en rodillas, energía, sueño, etc."></textarea>
+<label class="sub-label" for="txtNotes">Notas del día</label>
+<textarea id="txtNotes" placeholder="Sensaciones, dolor en rodillas, energía, sueño, etc."></textarea>
 </div>
 </div>
 </section>
